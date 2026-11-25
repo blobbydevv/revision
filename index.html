@@ -37,7 +37,8 @@
           <svg class="icon-btn__sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg>
           <svg class="icon-btn__moon" viewBox="0 0 24 24" aria-hidden="true" style="display:none"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/></svg>
         </button>
-        <button class="btn btn--primary btn--sm" data-route="app">Open the app</button>
+        <button class="btn btn--ghost btn--sm" id="accountBtn" hidden></button>
+        <button class="btn btn--primary btn--sm" id="navCta" data-route="app">Open the app</button>
       </div>
     </div>
     <nav class="nav__links nav__links--mobile" aria-label="Main, compact">
@@ -212,8 +213,16 @@
   </div>
 
   <div class="u-shell" style="padding-bottom:5rem">
+    <div id="mySubjectsWrap" hidden style="margin-bottom:3rem">
+      <div class="section-head">
+        <h2 style="font-size:1.5rem">My subjects</h2>
+        <button class="btn btn--quiet btn--sm" data-route="settings">Edit my subjects</button>
+      </div>
+      <div class="subject-grid" id="mySubjectGrid"></div>
+    </div>
+
     <div class="section-head">
-      <h2 style="font-size:1.5rem">All subjects</h2>
+      <h2 style="font-size:1.5rem" id="allSubjectsHeading">All subjects</h2>
       <div class="search">
         <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
         <input id="searchInput" type="search" placeholder="Search subjects or any card…" aria-label="Search subjects or cards">
@@ -221,6 +230,111 @@
     </div>
     <div class="subject-grid" id="subjectGrid"></div>
     <div class="card card--pad" id="searchResults" style="display:none;margin-top:1.25rem"></div>
+  </div>
+</section>
+
+<!-- ============ SIGN IN / SIGN UP ============ -->
+<section class="view" id="view-auth">
+  <div class="u-section">
+    <div class="u-shell auth">
+      <div class="auth__pitch">
+        <span class="eyebrow">Your account</span>
+        <h1 style="margin-top:1rem;font-size:clamp(1.9rem,1.4rem + 2vw,2.8rem)">Keep your progress and your subjects</h1>
+        <p class="u-lead" style="margin-top:.75rem">Sign in and Revise NI remembers your year group, the subjects you actually take, every flashcard box and every quiz score — so your dashboard only shows what matters to you.</p>
+        <ul class="ticklist">
+          <li>Your subjects, not all 26</li>
+          <li>Flashcard boxes and streak saved per person</li>
+          <li>Best quiz scores tracked per topic</li>
+          <li>Share a device? Everyone gets their own profile</li>
+        </ul>
+        <div class="notice notice--warn" style="margin-top:1.5rem">
+          <b>Read this first.</b> Accounts here are stored in <b>this browser only</b> — there is no server. That means your profile will not follow you to another device, anyone with access to this computer could clear it, and the password protects your profile from casual snooping, not from a determined attacker. <b>Never reuse a password you use anywhere else.</b>
+        </div>
+      </div>
+
+      <div class="card card--pad auth__box">
+        <div class="tabs" id="authTabs" style="margin-top:0">
+          <button class="tab is-active" data-auth="signin">Sign in</button>
+          <button class="tab" data-auth="signup">Create account</button>
+        </div>
+        <form id="authForm" autocomplete="off">
+          <label class="field-label" for="authUser">Username</label>
+          <input class="field" id="authUser" name="username" autocomplete="username" maxlength="24" required>
+          <label class="field-label" for="authPass" style="margin-top:1rem">Password</label>
+          <input class="field" id="authPass" name="password" type="password" autocomplete="new-password" minlength="6" required>
+          <p class="field-hint" id="authHint">At least 6 characters. Not a password you use elsewhere.</p>
+          <p class="form-error" id="authError" role="alert" hidden></p>
+          <button class="btn btn--primary" id="authSubmit" style="width:100%;margin-top:1.25rem">Sign in</button>
+        </form>
+        <p class="u-muted" style="font-size:.85rem;margin-top:1.1rem;text-align:center">
+          or <button class="linkish" id="guestBtn">carry on without an account</button>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ONBOARDING ============ -->
+<section class="view" id="view-setup">
+  <div class="u-section">
+    <div class="u-shell" style="max-width:860px">
+      <span class="eyebrow" id="setupStepLabel">Step 1 of 2</span>
+      <h1 style="margin-top:1rem;font-size:clamp(1.9rem,1.4rem + 2vw,2.8rem)" id="setupTitle">What year are you in?</h1>
+      <p class="u-lead" style="margin-top:.75rem" id="setupBlurb">This sets how your countdown and daily targets work. You can change it later.</p>
+
+      <div id="setupYear" style="margin-top:2rem">
+        <div class="choice-grid" id="yearGrid"></div>
+      </div>
+
+      <div id="setupSubjects" hidden style="margin-top:2rem">
+        <div class="section-head" style="margin-bottom:1rem">
+          <p class="u-muted" style="font-size:.9rem"><b id="pickedCount">0</b> selected · pick everything you're sitting</p>
+          <div style="display:flex;gap:.5rem">
+            <button class="btn btn--quiet btn--sm" id="pickCore">Select the common core</button>
+            <button class="btn btn--quiet btn--sm" id="pickNone">Clear all</button>
+          </div>
+        </div>
+        <div class="choice-grid choice-grid--subjects" id="subjectPicker"></div>
+      </div>
+
+      <div style="display:flex;gap:.75rem;margin-top:2rem;flex-wrap:wrap">
+        <button class="btn btn--primary" id="setupNext">Continue</button>
+        <button class="btn btn--ghost" id="setupBack" hidden>Back</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SETTINGS ============ -->
+<section class="view" id="view-settings">
+  <div class="u-section">
+    <div class="u-shell" style="max-width:860px">
+      <span class="eyebrow">Account</span>
+      <h1 style="margin-top:1rem;font-size:clamp(1.9rem,1.4rem + 2vw,2.8rem)" id="settingsName">Your profile</h1>
+      <p class="u-lead" style="margin-top:.75rem">Change your year group or the subjects you take. Nothing here leaves this browser.</p>
+
+      <div class="card card--pad" style="margin-top:2rem">
+        <h3>Year group</h3>
+        <div class="choice-grid" id="settingsYear" style="margin-top:1rem"></div>
+      </div>
+
+      <div class="card card--pad" style="margin-top:1.25rem">
+        <div class="section-head" style="margin-bottom:1rem">
+          <h3>My subjects</h3>
+          <p class="u-muted" style="font-size:.88rem"><b id="settingsCount">0</b> selected</p>
+        </div>
+        <div class="choice-grid choice-grid--subjects" id="settingsSubjects"></div>
+      </div>
+
+      <div class="card card--pad" style="margin-top:1.25rem">
+        <h3>Danger zone</h3>
+        <p class="u-muted" style="margin-top:.6rem;font-size:.92rem">Resetting clears every box, streak, quiz score and blurt for this profile. It cannot be undone.</p>
+        <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1rem">
+          <button class="btn btn--ghost" id="settingsReset">Reset my progress</button>
+          <button class="btn btn--ghost" id="settingsSignOut">Sign out</button>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -305,7 +419,7 @@
 <footer class="footer">
   <div class="u-shell footer__grid">
     <p class="u-measure">Built around the CCEA GCSE specifications. Always check the current specification, your exam timetable and past papers at <a href="https://ccea.org.uk" rel="noopener">ccea.org.uk</a>, and follow your teacher's guidance on options and set texts.</p>
-    <p>Progress is saved in this browser only. <button class="btn btn--quiet btn--sm" id="resetProgress" style="margin-left:.5rem">Reset progress</button></p>
+    <p>Accounts and progress are saved in this browser only — there is no server, and nothing is uploaded. <button class="btn btn--quiet btn--sm" data-route="settings" style="margin-left:.5rem">Account settings</button></p>
   </div>
 </footer>
 
