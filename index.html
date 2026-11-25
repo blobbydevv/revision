@@ -3,541 +3,313 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Revise NI — CCEA GCSE</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-/* VOICE: an energetic study companion — confident, quick, never childish
-   IDEA: a stack of index cards on a cobalt desk; everything flips, slides and stacks
-   PICTURE: the live flashcard deck itself, large in the first screen
-   COLOUR+TYPE: cobalt field, white cards, coral accent; Unbounded titles, Inter body
-   LAYOUT: sticky nav, hero band, subject grid, method ladder, tools; stacks under 600px */
-:root{color-scheme:light dark;
---bg:light-dark(#f4f5fb,#0b0f2a);--ink:light-dark(#0d1030,#eef0ff);--mut:light-dark(#5a5f80,#a3a8cc);
---card:light-dark(#fff,#151a3d);--line:light-dark(#e1e3f0,#262c5a);
---co:#2b43ff;--co2:light-dark(#1d30d6,#5b6dff);--ac:#ff5a3c;--ok:#16b37a;--warn:#f2a900}
-:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
-*{box-sizing:border-box;min-width:0}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Inter,system-ui,sans-serif;overflow-x:clip}
-h1,h2,h3{font-family:Unbounded,Inter,sans-serif;line-height:1.08;text-wrap:balance;margin:0}
-h1{font-size:clamp(32px,5vw,52px)}h2{font-size:clamp(24px,3vw,34px)}h3{font-size:18px}
-button,input,textarea,select{font:inherit;color:inherit}
-button{cursor:pointer;border:0;background:none}
-:focus-visible{outline:3px solid var(--ac);outline-offset:2px;border-radius:8px}
-.wrap{max-width:1240px;margin:0 auto}
-.band{padding:clamp(28px,4vw,64px) max(5vw,16px)}
-.mut{color:var(--mut)}
-nav{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 85%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
-nav .wrap{display:flex;align-items:center;gap:6px;padding:10px max(5vw,16px);flex-wrap:wrap}
-.logo{font-family:Unbounded;font-weight:700;font-size:18px;margin-right:auto;display:flex;align-items:center;gap:8px}
-.logo i{width:28px;height:20px;border-radius:5px;background:var(--co);box-shadow:5px -5px 0 var(--ac);display:inline-block;transform:rotate(-6deg)}
-.nl{padding:10px 14px;border-radius:999px;font-weight:600;font-size:15px;min-height:44px}
-.nl:hover,.nl.on{background:var(--card);box-shadow:0 1px 0 var(--line)}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:10px 18px;border-radius:12px;font-weight:600;background:var(--co);color:#fff;transition:transform .15s}
-.btn:hover{transform:translateY(-2px)}.btn.ghost{background:var(--card);color:var(--ink);border:1px solid var(--line)}
-.btn.ac{background:var(--ac)}
-/* hero */
-.hero{background:var(--co);color:#fff;position:relative;overflow:hidden}
-.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(900px 400px at 85% 10%,#5d70ff 0,transparent 60%),radial-gradient(500px 300px at 0 100%,#1a2bc4 0,transparent 70%)}
-.hero .wrap{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(24px,4vw,56px);align-items:center}
-.hero p{font-size:17px;max-width:46ch;opacity:.9}
-.stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
-.st{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:14px;padding:10px 14px}
-.st b{display:block;font-family:Unbounded;font-size:22px}.st span{font-size:13px;opacity:.85}
-.cd input{background:transparent;border:0;color:#fff;font-size:13px;padding:0;width:120px}
-/* flashcard */
-.deck{position:relative;perspective:1400px;height:clamp(300px,38vw,380px)}
-.deck .ghost1,.deck .ghost2{position:absolute;inset:0;border-radius:22px;background:#fff;opacity:.25;transform:rotate(4deg) translate(14px,8px)}
-.deck .ghost2{opacity:.12;transform:rotate(-5deg) translate(-12px,12px)}
-.fc{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .55s cubic-bezier(.2,.8,.2,1);cursor:pointer}
-.fc.flip{transform:rotateY(180deg)}
-.face{position:absolute;inset:0;backface-visibility:hidden;border-radius:22px;background:var(--card);color:var(--ink);padding:clamp(20px,3vw,34px);display:flex;flex-direction:column;box-shadow:0 30px 60px -20px rgba(5,10,60,.55),0 2px 0 rgba(0,0,0,.05);border-top:10px solid var(--sc,var(--ac))}
-.face.back{transform:rotateY(180deg);background:light-dark(#fffdf6,#1b2150)}
-.face .tag{font-size:13px;font-weight:600;color:var(--mut);display:flex;justify-content:space-between;gap:8px}
-.face .q{margin:auto 0;font-size:clamp(19px,2.4vw,26px);font-weight:600;line-height:1.3;text-wrap:balance;overflow:auto}
-.face .hint{font-size:13px;color:var(--mut)}
-.face .q.a{font-weight:500;font-size:clamp(17px,2vw,21px)}
-.rate{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
-.rate button{flex:1 1 90px;min-height:48px;border-radius:12px;font-weight:600;background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.25)}
-.sv .rate button{background:var(--card);color:var(--ink);border:1px solid var(--line)}
-.rate button:disabled{opacity:.4;cursor:default}
-.rate .r1:not(:disabled):hover{background:var(--ac);color:#fff}.rate .r2:not(:disabled):hover{background:var(--warn);color:#111}.rate .r3:not(:disabled):hover{background:var(--ok);color:#fff}
-/* grids */
-.sec-h{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;margin-bottom:22px}
-.search{min-height:46px;padding:10px 16px;border-radius:12px;border:1px solid var(--line);background:var(--card);width:min(340px,100%);font-size:16px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
-.sub{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;text-align:left;display:flex;flex-direction:column;gap:10px;transition:transform .18s,box-shadow .18s;min-height:150px}
-.sub:hover{transform:translateY(-4px) rotate(-.6deg);box-shadow:0 18px 30px -18px rgba(20,30,120,.45)}
-.mono{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-family:Unbounded;font-weight:700;color:#fff;font-size:15px}
-.sub h3{font-size:16px}.sub small{color:var(--mut);font-size:13px}
-.bar{height:6px;border-radius:9px;background:var(--line);overflow:hidden;margin-top:auto}.bar i{display:block;height:100%;background:var(--ok);border-radius:9px}
-/* methods */
-.ladder{display:grid;gap:12px;counter-reset:m}
-.m{background:var(--card);border:1px solid var(--line);border-radius:18px;display:grid;grid-template-columns:72px minmax(0,1fr) auto;gap:16px;padding:16px;align-items:start}
-.m .rk{font-family:Unbounded;font-weight:700;font-size:28px;color:var(--co2);text-align:center;padding-top:2px}
-.m p{margin:6px 0 0}.m ul{margin:8px 0 0;padding-left:20px}.m li{margin:3px 0}
-.pill{display:inline-block;font-size:13px;font-weight:600;padding:3px 10px;border-radius:999px;margin-left:8px;vertical-align:middle;font-family:Inter}
-.High{background:#d9f7ea;color:#0a6b47}.Moderate{background:#fff1c7;color:#7a5600}.Low{background:#ffe0d9;color:#a0301a}.Promising{background:#e2e6ff;color:#2133b8}
-.m details summary{cursor:pointer;color:var(--co2);font-weight:600;margin-top:8px;min-height:32px}
-/* subject view */
-.sv-head{background:var(--sc);color:#fff}
-.sv-head .wrap{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
-.back{color:#fff;font-weight:600;min-height:44px;padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.18)}
-.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:20px 0 26px}
-.tab{min-height:44px;padding:8px 16px;border-radius:999px;font-weight:600;border:1px solid var(--line);background:var(--card)}
-.tab.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.two{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px;align-items:start}
-.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px}
-.chips{display:flex;flex-wrap:wrap;gap:8px}.chip{padding:6px 12px;border-radius:999px;background:var(--bg);border:1px solid var(--line);font-size:14px}
-.opt{display:block;width:100%;text-align:left;padding:14px 16px;border-radius:12px;border:1px solid var(--line);background:var(--card);margin-top:10px;min-height:50px;transition:background .15s}
-.opt:hover{border-color:var(--co2)}.opt.good{background:#d9f7ea;color:#0a4b33;border-color:var(--ok)}.opt.bad{background:#ffe0d9;color:#7a1f0e;border-color:var(--ac)}
-textarea{width:100%;min-height:260px;border-radius:14px;border:1px solid var(--line);background:var(--card);padding:16px;font-size:16px;resize:vertical}
-.chk{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--line)}
-.chk input{width:22px;height:22px;flex:none;margin-top:2px;accent-color:var(--ok)}
-.list .row{padding:14px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr) 60px;gap:14px}
-.box{font-size:13px;font-weight:700;color:var(--mut);text-align:right}
-/* timer */
-.tw{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:center}
-.ring{width:min(340px,80vw);aspect-ratio:1;margin:auto;position:relative}
-.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
-.ring .t{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
-.ring .t b{font-family:Unbounded;font-size:clamp(40px,8vw,64px);display:block;font-variant-numeric:tabular-nums}
-.seg{display:flex;gap:6px;flex-wrap:wrap}
-footer{border-top:1px solid var(--line);font-size:14px}
-.note{font-size:13px;color:var(--mut)}
-.view{display:none}.view.on{display:block;animation:in .35s ease}
-@keyframes in{from{opacity:0;transform:translateY(8px)}}
-@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
-@media(max-width:860px){.hero .wrap,.two,.tw{grid-template-columns:minmax(0,1fr)}.m{grid-template-columns:48px minmax(0,1fr)}.m .go{grid-column:2}.list .row{grid-template-columns:minmax(0,1fr) 50px}.list .row .ans{grid-column:1/-1;order:3}}
-@media(max-width:600px){.nl{padding:8px 10px;font-size:14px}.m .rk{font-size:20px}}
-</style>
+<title>Revise NI — CCEA GCSE revision that actually works</title>
+<meta name="description" content="Spaced-repetition flashcards, quizzes, blurting and a focus timer for every CCEA GCSE subject. Free, no account, works offline.">
+<meta name="theme-color" content="#4f46e5">
+<meta property="og:title" content="Revise NI — CCEA GCSE revision that actually works">
+<meta property="og:description" content="26 CCEA GCSE subjects. Flashcards that remember what you forget, quizzes, blurting and a focus timer — built on what the research says works.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%234f46e5'/><path d='M30 28h30a14 14 0 0 1 0 28H30zM30 56h22l16 18H30z' fill='white'/></svg>">
+<script>/* set theme before paint to avoid a flash */
+(function(){try{var t=localStorage.getItem('rni-theme');if(t)document.documentElement.dataset.theme=t}catch(e){}})();
+</script>
 </head>
 <body>
-<nav><div class="wrap">
-  <button class="logo" data-go="home" aria-label="Home"><i></i>Revise NI</button>
-  <button class="nl" data-go="home">Subjects</button>
-  <button class="nl" data-go="methods">Methods</button>
-  <button class="nl" data-go="mixed">Mixed review</button>
-  <button class="nl" data-go="timer">Timer</button>
-</div></nav>
 
-<main>
-<!-- HOME -->
-<section class="view" id="v-home">
-  <div class="band hero"><div class="wrap">
-    <div>
-      <h1>Revise smarter for CCEA GCSEs.</h1>
-      <p style="margin-top:16px">Every CCEA GCSE subject. Flashcards that remember what you forget, quick-fire quizzes, blurting, a focus timer, and every revision method ranked by how well the research says it actually works.</p>
-      <div class="stats">
-        <div class="st"><b id="hDue">0</b><span>cards due today</span></div>
-        <div class="st"><b id="hMas">0</b><span>cards mastered</span></div>
-        <div class="st"><b id="hStreak">0</b><span>day streak</span></div>
-        <div class="st cd"><b id="hDays">–</b><span>days to <input type="date" id="exDate" aria-label="First exam date"></span></div>
-      </div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:22px">
-        <button class="btn ac" data-go="mixed">Start today's review</button>
-        <button class="btn ghost" data-go="methods" style="background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.3)">How to revise</button>
+<header class="nav" id="nav">
+  <div class="u-shell">
+    <div class="nav__inner">
+      <button class="brand" data-route="home" aria-label="Revise NI home">
+        <span class="brand__mark" aria-hidden="true">RN</span> Revise NI
+      </button>
+      <nav class="nav__links" aria-label="Main">
+        <button class="nav__link" data-route="app">Subjects</button>
+        <button class="nav__link" data-route="mixed">Mixed review</button>
+        <button class="nav__link" data-route="methods">Methods</button>
+        <button class="nav__link" data-route="timer">Focus timer</button>
+      </nav>
+      <div class="nav__tools">
+        <button class="icon-btn" id="themeToggle" aria-label="Switch between light and dark theme" title="Switch theme">
+          <svg class="icon-btn__sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg>
+          <svg class="icon-btn__moon" viewBox="0 0 24 24" aria-hidden="true" style="display:none"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5z"/></svg>
+        </button>
+        <button class="btn btn--primary btn--sm" data-route="app">Open the app</button>
       </div>
     </div>
-    <div>
-      <div class="deck"><div class="ghost2"></div><div class="ghost1"></div><div class="fc" id="heroCard"></div></div>
-      <div class="rate" id="heroRate"></div>
-    </div>
-  </div></div>
-
-  <div class="band"><div class="wrap">
-    <div class="sec-h"><div><h2>Your subjects</h2><p class="mut" style="margin:6px 0 0">Pick one to open its flashcards, quiz, blurt sheet and topic list.</p></div>
-      <input class="search" id="q" type="search" placeholder="Search subjects or any card…" aria-label="Search"></div>
-    <div class="grid" id="subGrid"></div>
-    <div id="searchRes" class="panel list" style="display:none;margin-top:18px"></div>
-  </div></div>
-</section>
-
-<!-- METHODS -->
-<section class="view" id="v-methods"><div class="band"><div class="wrap">
-  <h1>Revision methods, ranked</h1>
-  <p class="mut" style="max-width:70ch;margin:14px 0 26px">Ordered by the strength of the evidence, mainly from Dunlosky et al.'s 2013 review of ten study techniques plus later classroom research. The top two are the ones that matter most: if you only do one thing, test yourself, and spread it out.</p>
-  <div class="ladder" id="ladder"></div>
-</div></div></section>
-
-<!-- SUBJECT -->
-<section class="view sv" id="v-subject">
-  <div class="band sv-head" id="svHead"></div>
-  <div class="band" style="padding-top:0"><div class="wrap">
-    <div class="tabs" id="tabs"></div>
-    <div id="svBody"></div>
-  </div></div>
-</section>
-
-<!-- MIXED -->
-<section class="view sv" id="v-mixed"><div class="band"><div class="wrap">
-  <h1>Mixed review</h1>
-  <p class="mut" style="max-width:66ch;margin:12px 0 24px">Due cards from every subject, shuffled together. Mixing subjects (interleaving) feels harder, and that is exactly why it sticks.</p>
-  <div class="two"><div><div class="deck"><div class="fc" id="mixCard"></div></div><div class="rate" id="mixRate"></div></div>
-  <div class="panel"><h3>How the boxes work</h3><p class="mut" style="margin:8px 0 0">Each card lives in box 1–5. <b>Got it</b> moves it up a box and pushes it further away (1, 2, 4, 8, then 16 days). <b>Shaky</b> keeps it where it is for tomorrow. <b>Forgot</b> sends it back to box 1. Box 5 counts as mastered.</p>
-  <p class="mut">Keys: <b>Space</b> flip, <b>1</b> forgot, <b>2</b> shaky, <b>3</b> got it.</p><p id="mixLeft" style="font-weight:600"></p></div></div>
-</div></div></section>
-
-<!-- TIMER -->
-<section class="view" id="v-timer"><div class="band"><div class="wrap tw">
-  <div class="ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" fill="none" stroke="var(--line)" stroke-width="8"/><circle id="arc" cx="60" cy="60" r="52" fill="none" stroke="var(--co)" stroke-width="8" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="0"/></svg>
-    <div class="t"><div><b id="tm">25:00</b><span id="tmode" class="mut">Focus</span></div></div></div>
-  <div>
-    <h1>Focus timer</h1>
-    <p class="mut" style="margin:12px 0 18px;max-width:52ch">Work in short, single-task blocks with your phone in another room, then take a real break. After four blocks, take a longer one. Use each block for one active method: flashcards, a past paper question, or a blurt.</p>
-    <div class="seg" id="presets"></div>
-    <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap"><button class="btn" id="tGo">Start</button><button class="btn ghost" id="tReset">Reset</button></div>
-    <p id="tCount" class="mut" style="margin-top:14px"></p>
+    <nav class="nav__links nav__links--mobile" aria-label="Main, compact">
+      <button class="nav__link" data-route="app">Subjects</button>
+      <button class="nav__link" data-route="mixed">Mixed review</button>
+      <button class="nav__link" data-route="methods">Methods</button>
+      <button class="nav__link" data-route="timer">Timer</button>
+    </nav>
   </div>
-</div></div></section>
+</header>
+
+<main id="main">
+
+<!-- ============ LANDING ============ -->
+<section class="view" id="view-home">
+
+  <div class="hero">
+    <div class="u-shell hero__grid">
+      <div>
+        <span class="eyebrow">CCEA · Northern Ireland · <span id="heroCount">26 subjects</span></span>
+        <h1 class="hero__title">Stop re-reading.<br>Start <em>remembering</em>.</h1>
+        <p class="u-lead hero__copy">Every CCEA GCSE subject, turned into flashcards that come back exactly when you're about to forget them — plus quizzes, blurting, topic checklists and a focus timer. Built on what the evidence actually supports, not what feels productive.</p>
+        <div class="hero__cta">
+          <button class="btn btn--primary" data-route="app">Start revising — it's free</button>
+          <button class="btn btn--ghost" data-route="methods">See the evidence</button>
+        </div>
+        <div class="hero__meta">
+          <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg> No account needed</span>
+          <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg> Works offline</span>
+          <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5l5 5L20 6.5"/></svg> Nothing leaves your device</span>
+        </div>
+      </div>
+      <div class="hero__visual">
+        <div class="deck">
+          <div class="deck__stack deck__stack--2"></div>
+          <div class="deck__stack deck__stack--1"></div>
+          <div class="flashcard" id="heroCard"></div>
+        </div>
+        <div class="deck-rate" id="heroRate"></div>
+      </div>
+    </div>
+  </div>
+
+  <section class="u-section" style="padding-top:0">
+    <div class="u-shell reveal">
+      <div class="stats">
+        <div class="stat"><b class="stat__num" id="statSubjects">0</b><span class="stat__label">CCEA subjects</span></div>
+        <div class="stat"><b class="stat__num" id="statCards">0</b><span class="stat__label">flashcards ready to go</span></div>
+        <div class="stat"><b class="stat__num" id="statDue">0</b><span class="stat__label">due for you today</span></div>
+        <div class="stat"><b class="stat__num" id="statStreak">0</b><span class="stat__label">day streak</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="u-section" id="how" style="background:var(--bg-sunk);border-block:1px solid var(--line)">
+    <div class="u-shell">
+      <div class="reveal u-center" style="max-width:62ch">
+        <span class="eyebrow">How it works</span>
+        <h2 style="margin-top:1rem">Three steps, fifteen minutes a day</h2>
+        <p class="u-lead u-center" style="margin-top:.9rem">Cramming the night before loses to short, spaced sessions — every time it's been tested.</p>
+      </div>
+      <div class="grid-3 reveal" style="margin-top:2.5rem">
+        <div class="step"><span class="step__n">STEP 01</span><h3>Pick a subject</h3><p>26 CCEA subjects, each with its topic areas and a ready-made deck. No setup, no importing, nothing to buy.</p></div>
+        <div class="step"><span class="step__n">STEP 02</span><h3>Test yourself</h3><p>Say the answer out loud before you flip. Rate it honestly — forgot, shaky, got it. That struggle is the bit that works.</p></div>
+        <div class="step"><span class="step__n">STEP 03</span><h3>Let it schedule you</h3><p>Cards you forget return tomorrow. Cards you know drift out to 2, 4, 8 and 16 days. You just show up daily.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="u-section">
+    <div class="u-shell">
+      <div class="section-head reveal">
+        <div>
+          <span class="eyebrow">What's inside</span>
+          <h2 style="margin-top:1rem">Five ways to revise, one place</h2>
+        </div>
+        <button class="btn btn--ghost" data-route="app">Browse subjects</button>
+      </div>
+      <div class="grid-3 reveal">
+        <div class="feature">
+          <span class="feature__icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="14" height="14" rx="2.5"/><path d="M7 19h12a2 2 0 0 0 2-2V8"/></svg></span>
+          <h3>Spaced flashcards</h3><p>A five-box Leitner system does the scheduling. Forgotten cards come straight back; mastered ones get out of your way.</p>
+        </div>
+        <div class="feature">
+          <span class="feature__icon"><svg viewBox="0 0 24 24"><path d="M9 11l2 2 4-4"/><rect x="3.5" y="4" width="17" height="16" rx="3"/></svg></span>
+          <h3>Quick-fire quizzes</h3><p>Eight multiple-choice questions per round. Anything you get wrong is pushed back to box one automatically.</p>
+        </div>
+        <div class="feature">
+          <span class="feature__icon"><svg viewBox="0 0 24 24"><path d="M4 5h16M4 10h16M4 15h10"/><path d="M15.5 19.5l2 2 4.5-4.5"/></svg></span>
+          <h3>Blurting</h3><p>Seven minutes, no notes, write everything you remember. Then tick off what you got and send the gaps to your deck.</p>
+        </div>
+        <div class="feature">
+          <span class="feature__icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/></svg></span>
+          <h3>Focus timer</h3><p>25/5, 50/10 or 15/3 blocks with a longer break every fourth one. One method per block, phone in another room.</p>
+        </div>
+        <div class="feature">
+          <span class="feature__icon"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16"/><path d="M8 15l4-5 3 3 5-7"/></svg></span>
+          <h3>Methods, ranked</h3><p>Fourteen revision techniques rated by the strength of the evidence behind them — so you stop wasting nights on highlighting.</p>
+        </div>
+        <div class="feature">
+          <span class="feature__icon"><svg viewBox="0 0 24 24"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg></span>
+          <h3>Mixed review</h3><p>Due cards from every subject, shuffled. Interleaving feels harder than blocking — which is exactly why it sticks.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="u-section" style="background:var(--bg-sunk);border-block:1px solid var(--line)">
+    <div class="u-shell">
+      <div class="section-head reveal">
+        <div>
+          <span class="eyebrow">Every subject</span>
+          <h2 style="margin-top:1rem">From Maths to Moving Image Arts</h2>
+          <p class="u-lead" style="margin-top:.75rem">Core subjects, the sciences, languages, and the ones nobody else bothers to cover.</p>
+        </div>
+      </div>
+      <div class="chipline reveal" id="subjectChips"></div>
+      <div class="reveal" style="margin-top:1.75rem">
+        <button class="btn btn--primary" data-route="app">Open your subjects</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="u-section">
+    <div class="u-shell">
+      <div class="section-head reveal">
+        <div>
+          <span class="eyebrow">The evidence</span>
+          <h2 style="margin-top:1rem">The top three beat everything else</h2>
+          <p class="u-lead" style="margin-top:.75rem">Ranked mainly on Dunlosky et al.'s review of ten study techniques, plus later classroom research.</p>
+        </div>
+        <button class="btn btn--ghost" data-route="methods">All 14 methods</button>
+      </div>
+      <div class="ladder reveal" id="methodsPreview"></div>
+    </div>
+  </section>
+
+  <section class="u-section" style="padding-top:0">
+    <div class="u-shell reveal">
+      <div class="cta">
+        <h2>Your first review takes four minutes.</h2>
+        <p>192 cards are already written and waiting. Pick a subject, flip a card, and let the boxes do the planning for you.</p>
+        <div class="cta__row">
+          <button class="btn btn--accent" data-route="app">Start revising</button>
+          <button class="btn btn--onDark" data-route="mixed">Try a mixed review</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</section>
+
+<!-- ============ APP: SUBJECT DASHBOARD ============ -->
+<section class="view" id="view-app">
+  <div class="u-section" style="padding-bottom:2rem">
+    <div class="u-shell">
+      <span class="eyebrow">Your revision</span>
+      <h1 style="margin-top:1rem;font-size:clamp(1.9rem,1.4rem + 2vw,2.8rem)" id="greeting">Welcome back</h1>
+      <p class="u-lead" style="margin-top:.75rem">Pick a subject for its flashcards, quiz, blurt sheet and topic list — or clear everything that's due in one mixed session.</p>
+
+      <div class="stats" style="margin-top:2rem">
+        <div class="stat"><b class="stat__num" id="appDue">0</b><span class="stat__label">cards due today</span></div>
+        <div class="stat"><b class="stat__num" id="appMastered">0</b><span class="stat__label">cards mastered</span></div>
+        <div class="stat"><b class="stat__num" id="appStreak">0</b><span class="stat__label">day streak</span></div>
+        <div class="stat"><b class="stat__num" id="appDays">–</b><span class="stat__label">days to <input type="date" id="examDate" aria-label="Your first exam date"></span></div>
+      </div>
+
+      <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1.5rem">
+        <button class="btn btn--primary" data-route="mixed">Start today's review</button>
+        <button class="btn btn--ghost" data-route="timer">Open focus timer</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="u-shell" style="padding-bottom:5rem">
+    <div class="section-head">
+      <h2 style="font-size:1.5rem">All subjects</h2>
+      <div class="search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>
+        <input id="searchInput" type="search" placeholder="Search subjects or any card…" aria-label="Search subjects or cards">
+      </div>
+    </div>
+    <div class="subject-grid" id="subjectGrid"></div>
+    <div class="card card--pad" id="searchResults" style="display:none;margin-top:1.25rem"></div>
+  </div>
+</section>
+
+<!-- ============ SUBJECT ============ -->
+<section class="view" id="view-subject">
+  <div class="subject-head" id="subjectHead"></div>
+  <div class="u-shell" style="padding-bottom:5rem">
+    <div class="tabs" id="subjectTabs"></div>
+    <div id="subjectBody"></div>
+  </div>
+</section>
+
+<!-- ============ MIXED ============ -->
+<section class="view" id="view-mixed">
+  <div class="u-section">
+    <div class="u-shell">
+      <span class="eyebrow">Interleaved practice</span>
+      <h1 style="margin-top:1rem;font-size:clamp(1.9rem,1.4rem + 2vw,2.8rem)">Mixed review</h1>
+      <p class="u-lead" style="margin-top:.75rem">Due cards from every subject, shuffled together. Switching between subjects feels harder than drilling one — and that difficulty is what makes it stick.</p>
+      <div class="split" style="margin-top:2.5rem">
+        <div>
+          <div class="deck"><div class="flashcard" id="mixCard"></div></div>
+          <div class="deck-rate" id="mixRate"></div>
+        </div>
+        <div class="card card--pad">
+          <h3>How the boxes work</h3>
+          <p class="u-muted" style="margin-top:.6rem;font-size:.93rem">Every card sits in a box from 1 to 5. <b>Got it</b> moves it up and pushes it further away — 1, 2, 4, 8, then 16 days. <b>Shaky</b> keeps it where it is for tomorrow. <b>Forgot</b> sends it back to box 1 and reshuffles it into this session.</p>
+          <p class="u-muted" style="margin-top:.75rem;font-size:.93rem">Box 5 counts as mastered.</p>
+          <hr style="border:0;border-top:1px solid var(--line);margin:1.1rem 0">
+          <h3>Keyboard</h3>
+          <p class="u-muted" style="margin-top:.6rem;font-size:.93rem"><b>Space</b> flip · <b>1</b> forgot · <b>2</b> shaky · <b>3</b> got it</p>
+          <p id="mixLeft" style="font-weight:600;margin-top:1rem"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ METHODS ============ -->
+<section class="view" id="view-methods">
+  <div class="u-section">
+    <div class="u-shell">
+      <span class="eyebrow">Ranked by evidence</span>
+      <h1 style="margin-top:1rem;font-size:clamp(1.9rem,1.4rem + 2vw,2.8rem)">Revision methods, best first</h1>
+      <p class="u-lead" style="margin-top:.75rem">Ordered by the strength of the evidence behind them, mainly from Dunlosky et al.'s 2013 review of ten study techniques plus later classroom research. If you only take two things from this page: test yourself, and spread it out.</p>
+      <div class="ladder" id="methodsFull" style="margin-top:2.5rem"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TIMER ============ -->
+<section class="view" id="view-timer">
+  <div class="u-section">
+    <div class="u-shell timer">
+      <div class="ring">
+        <svg viewBox="0 0 120 120" aria-hidden="true">
+          <circle cx="60" cy="60" r="52" fill="none" stroke="var(--line)" stroke-width="7"/>
+          <circle id="timerArc" cx="60" cy="60" r="52" fill="none" stroke="var(--brand)" stroke-width="7" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="0" style="transition:stroke-dashoffset .4s linear"/>
+        </svg>
+        <div class="ring__face"><div>
+          <b class="ring__time" id="timerTime">25:00</b>
+          <span class="ring__mode" id="timerMode">Focus</span>
+        </div></div>
+      </div>
+      <div>
+        <span class="eyebrow">Single-tasking</span>
+        <h1 style="margin-top:1rem;font-size:clamp(1.9rem,1.4rem + 2vw,2.8rem)">Focus timer</h1>
+        <p class="u-lead" style="margin-top:.75rem">Work in short blocks with your phone in another room, then take a real break. After four blocks, take a longer one. Use each block for one active method — flashcards, a past paper question, or a blurt.</p>
+        <div class="tabs" id="timerPresets" style="margin-top:1.5rem"></div>
+        <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+          <button class="btn btn--primary" id="timerStart">Start</button>
+          <button class="btn btn--ghost" id="timerReset">Reset</button>
+        </div>
+        <p class="u-muted" id="timerCount" style="margin-top:1.1rem;font-size:.9rem"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
 </main>
 
-<footer class="band"><div class="wrap note">Built around the CCEA GCSE specifications (grades A*–G, including C*). Always check the current specification, your exam timetable and past papers at ccea.org.uk, and use your teacher's guidance on which options and set texts you're studying. Progress is saved in this browser only.</div></footer>
+<footer class="footer">
+  <div class="u-shell footer__grid">
+    <p class="u-measure">Built around the CCEA GCSE specifications. Always check the current specification, your exam timetable and past papers at <a href="https://ccea.org.uk" rel="noopener">ccea.org.uk</a>, and follow your teacher's guidance on options and set texts.</p>
+    <p>Progress is saved in this browser only. <button class="btn btn--quiet btn--sm" id="resetProgress" style="margin-left:.5rem">Reset progress</button></p>
+  </div>
+</footer>
 
-<script>
-{
-const S=[
-{id:'eng-lang',n:'English Language',c:'#e0435b',m:'EL',topics:['Writing for purpose & audience','Reading non-fiction & media texts','Personal or creative writing','Reading literary texts','Speaking & listening (CA)','Studying spoken language (CA)'],cards:[
-['What does AFOREST stand for?','Alliteration, Facts, Opinions, Rhetorical questions, Emotive language, Statistics, Triplets (rule of three): persuasive techniques.'],
-['What is PEEL / PETAL for analysis?','Point, Evidence (short quote), Explain the effect, Link back to the question. Always say what the technique makes the reader think or feel.'],
-['Difference between a simile and a metaphor?','A simile compares using "like" or "as"; a metaphor says something IS something else.'],
-['What is pathetic fallacy?','Giving human emotions to weather or nature to reflect mood, e.g. a storm during conflict.'],
-['How should you plan in the exam?','Spend ~5 minutes: identify purpose, audience and form (PAF), list 4–5 paragraph points, and pick an opening hook and a strong ending.'],
-['Name four ways to vary sentences.','Short punchy sentences, complex sentences with subordinate clauses, questions, and fronted adverbials or one-word sentences for impact.'],
-['What makes a strong creative-writing opening?','Start in the action or with a striking detail, use the senses, and hold back information to create intrigue.'],
-['What is the difference between tone and mood?','Tone is the writer\'s attitude (e.g. sarcastic); mood is the atmosphere the reader feels (e.g. tense).']]},
-{id:'eng-lit',n:'English Literature',c:'#b8326e',m:'LT',topics:['Novel (e.g. Of Mice and Men)','Drama (e.g. An Inspector Calls, Blood Brothers)','Poetry anthology','Unseen poetry','Shakespeare (controlled assessment)','Context & writer\'s methods'],cards:[
-['An Inspector Calls: when is it set and when was it written?','Set in 1912 (before WWI and the Titanic sinking); written by J.B. Priestley in 1945. The gap creates dramatic irony.'],
-['What is Priestley\'s main message?','Social responsibility: "We are members of one body." He attacks capitalist selfishness and class prejudice.'],
-['Of Mice and Men: author, date and setting?','John Steinbeck, 1937; set near Soledad, California, during the Great Depression.'],
-['What does the American Dream mean in Of Mice and Men?','The hope of owning land and being independent, shown by George and Lennie\'s dream farm, and shown to be unreachable for most.'],
-['What is dramatic irony?','When the audience knows something a character doesn\'t, e.g. Birling calling the Titanic "unsinkable".'],
-['What is an enjambment?','A sentence running over the end of a poetic line without punctuation, creating pace or emphasis.'],
-['What is a volta?','A turn in a poem\'s argument or mood, often in a sonnet.'],
-['How do you write about context without bolting it on?','Link it to a specific quote and say how the time period shapes the writer\'s message or the audience\'s reaction.']]},
-{id:'maths',n:'Mathematics',c:'#2b43ff',m:'MA',topics:['Number','Algebra','Ratio & proportion','Geometry & measures','Probability','Statistics'],cards:[
-['Area of a trapezium?','½(a + b)h, where a and b are the parallel sides.'],
-['Quadratic formula?','x = (−b ± √(b² − 4ac)) / 2a'],
-['Pythagoras\' theorem?','a² + b² = c², where c is the hypotenuse.'],
-['SOH CAH TOA?','sin = opp/hyp, cos = adj/hyp, tan = opp/adj.'],
-['Gradient of a line through two points?','(y₂ − y₁) / (x₂ − x₁). In y = mx + c, m is the gradient and c the y-intercept.'],
-['Volume of a cylinder?','πr²h'],
-['How do you find a percentage increase multiplier?','1 + (percentage ÷ 100). A 15% increase is × 1.15; a 15% decrease is × 0.85.'],
-['Probability of A and B (independent)?','P(A) × P(B). For "A or B" (mutually exclusive) add: P(A) + P(B).'],
-['Interior angles of an n-sided polygon sum to?','(n − 2) × 180°'],
-['Upper and lower bounds of 6.4 to 1 d.p.?','Lower 6.35, upper 6.45.']]},
-{id:'fmaths',n:'Further Mathematics',c:'#4b2bd6',m:'FM',topics:['Pure maths','Mechanics','Statistics','Differentiation','Matrices','Logarithms'],cards:[
-['Differentiate axⁿ','anxⁿ⁻¹'],
-['How do you find a stationary point?','Set dy/dx = 0 and solve; use d²y/dx² to classify (positive = minimum, negative = maximum).'],
-['log a + log b = ?','log(ab)'],
-['Newton\'s second law?','F = ma (resultant force = mass × acceleration).'],
-['SUVAT: v² = ?','v² = u² + 2as'],
-['Multiply a 2×2 matrix by a column vector (a b; c d)(x; y)?','(ax + by; cx + dy)'],
-['Determinant of (a b; c d)?','ad − bc'],
-['Integrate xⁿ','xⁿ⁺¹ / (n + 1) + c, for n ≠ −1.']]},
-{id:'bio',n:'Biology',c:'#1a9e5f',m:'BI',topics:['Cells & microscopy','Photosynthesis & plants','Nutrition & health','Enzymes & digestion','DNA & genetics','Homeostasis & nervous system','Body defence','Ecological relationships','Practical skills'],cards:[
-['Function of the mitochondria?','Site of aerobic respiration, releasing energy for the cell.'],
-['Word equation for photosynthesis?','Carbon dioxide + water → glucose + oxygen (light energy, absorbed by chlorophyll).'],
-['What is osmosis?','The diffusion of water from a dilute solution to a more concentrated solution through a selectively permeable membrane.'],
-['What happens to an enzyme above its optimum temperature?','The active site changes shape (denatures), so the substrate no longer fits and the reaction slows or stops.'],
-['What are the three parts of a plant cell not found in animal cells?','Cell wall, chloroplasts and a large permanent vacuole.'],
-['What is a gene?','A section of DNA that codes for a particular protein (a characteristic).'],
-['Role of insulin?','Released by the pancreas when blood glucose is high; causes the liver to convert glucose to glycogen, lowering blood glucose.'],
-['Aerobic vs anaerobic respiration in muscles?','Aerobic: glucose + oxygen → CO₂ + water (lots of energy). Anaerobic: glucose → lactic acid (less energy, oxygen debt).'],
-['What is a reflex arc?','Receptor → sensory neurone → relay neurone (spinal cord) → motor neurone → effector. Fast and automatic.'],
-['What do antibiotics treat?','Bacterial infections only, not viruses. Overuse leads to resistant bacteria such as MRSA.']]},
-{id:'chem',n:'Chemistry',c:'#e07b12',m:'CH',topics:['Atomic structure','Bonding & structures','Periodic table','Quantitative chemistry (moles)','Acids, bases & salts','Rates & equilibrium','Electrochemistry','Organic chemistry','Practical skills'],cards:[
-['Relative charges of proton, neutron, electron?','+1, 0, −1. Masses: 1, 1, ~1/1840.'],
-['What is an ionic bond?','Electrostatic attraction between oppositely charged ions, formed by transferring electrons from a metal to a non-metal.'],
-['Moles formula?','moles = mass ÷ Mr'],
-['Acid + metal carbonate → ?','Salt + water + carbon dioxide'],
-['Four ways to increase rate of reaction?','Raise temperature, increase concentration (or pressure for gases), increase surface area, add a catalyst.'],
-['Test for hydrogen gas?','A lit splint gives a squeaky pop.'],
-['Test for carbon dioxide?','Bubble through limewater: it turns milky/cloudy.'],
-['General formula of alkanes?','CₙH₂ₙ₊₂ (saturated, single C–C bonds). Alkenes: CₙH₂ₙ, decolourise bromine water.'],
-['Why are Group 1 metals more reactive down the group?','The outer electron is further from the nucleus with more shielding, so it is lost more easily.'],
-['In electrolysis, what forms at the cathode?','The metal (or hydrogen if the metal is more reactive than hydrogen). Positive ions gain electrons: reduction.']]},
-{id:'phys',n:'Physics',c:'#0f8fbf',m:'PH',topics:['Motion & forces','Density & pressure','Energy & work','Atomic & nuclear physics','Waves & light','Electricity','Magnetism & electromagnetism','Space physics','Practical skills'],cards:[
-['Speed formula?','speed = distance ÷ time'],
-['Kinetic energy?','KE = ½mv²'],
-['Ohm\'s law?','V = IR (voltage = current × resistance)'],
-['Electrical power?','P = IV (also P = I²R)'],
-['Wave speed equation?','v = fλ (speed = frequency × wavelength)'],
-['Density?','ρ = m ÷ V'],
-['What is half-life?','The time for half the radioactive nuclei in a sample to decay (or for the count rate to halve).'],
-['Alpha, beta, gamma: which is most penetrating?','Gamma (stopped by thick lead/concrete). Alpha is stopped by paper, beta by a few mm of aluminium. Alpha is most ionising.'],
-['Efficiency?','useful energy output ÷ total energy input (× 100 for %).'],
-['Order of the electromagnetic spectrum (long to short wavelength)?','Radio, microwave, infrared, visible, ultraviolet, X-ray, gamma.']]},
-{id:'geog',n:'Geography',c:'#2f9e8f',m:'GE',topics:['Rivers','Coasts','Our changing weather & climate','The restless earth','Population','Changing urban areas','Contrasts in world development','Managing our environment','Fieldwork'],cards:[
-['Four types of river erosion?','Hydraulic action, abrasion, attrition, solution.'],
-['How does a waterfall form?','Soft rock under hard rock erodes faster, creating an overhang that collapses; a plunge pool forms and the waterfall retreats upstream, leaving a gorge.'],
-['What is longshore drift?','Waves approach at an angle set by the prevailing wind (swash), return straight down the beach (backwash), moving sediment along the coast.'],
-['Name a hard and a soft coastal defence.','Hard: sea wall, groynes, rock armour. Soft: beach nourishment, dune regeneration.'],
-['What happens at a destructive plate margin?','Oceanic plate subducts under continental plate, causing violent earthquakes and explosive volcanoes.'],
-['What are the stages of the Demographic Transition Model?','1 high birth/death; 2 death rate falls; 3 birth rate falls; 4 both low; 5 birth below death (declining).'],
-['What is the Human Development Index?','A measure combining life expectancy, education (years of schooling) and income (GNI per capita).'],
-['Define anticyclone.','An area of high pressure with sinking air, bringing settled, dry weather (hot in summer, cold and frosty in winter).'],
-['What is sustainable development?','Meeting the needs of the present without compromising the ability of future generations to meet theirs.']]},
-{id:'hist',n:'History',c:'#a0522d',m:'HI',topics:['Germany 1933–45 (or Russia / USA)','Northern Ireland c.1965–98','International relations 1945–2003','Source analysis','Extended writing'],cards:[
-['When did Hitler become Chancellor?','30 January 1933.'],
-['What was the Night of the Long Knives?','June 1934: Hitler had Röhm and SA leaders killed to remove rivals and win army support.'],
-['What were the Nuremberg Laws (1935)?','They stripped Jews of German citizenship and banned marriage between Jews and non-Jews.'],
-['What was Kristallnacht?','9–10 November 1938: a state-organised attack on Jewish homes, shops and synagogues across Germany.'],
-['What was NICRA and when was it founded?','The Northern Ireland Civil Rights Association, 1967: campaigned for one man one vote, an end to gerrymandering and fair housing allocation.'],
-['What happened on Bloody Sunday?','30 January 1972, Derry: British paratroopers shot dead 13 civil rights marchers (a 14th died later).'],
-['What was the Sunningdale Agreement (1973)?','Set up a power-sharing executive and a Council of Ireland; collapsed in May 1974 after the Ulster Workers\' Council strike.'],
-['Anglo-Irish Agreement date and key point?','1985: gave the Irish government a consultative role in Northern Ireland affairs; strongly opposed by unionists.'],
-['When was the Good Friday (Belfast) Agreement?','10 April 1998: power-sharing Assembly, North–South bodies, approved by referendums north and south.'],
-['Cuban Missile Crisis?','October 1962: the USSR placed nuclear missiles in Cuba; a US naval quarantine led to their removal after 13 days.'],
-['When was the Berlin Wall built and when did it fall?','Built August 1961; opened November 1989.']]},
-{id:'re',n:'Religious Studies',c:'#7a4bd0',m:'RS',topics:['The Christian Church / Mark\'s Gospel','Christianity through a study of Luke or Mark','Personal & marital relationships','Contemporary ethical issues','An introduction to philosophy of religion','World religions (options)'],cards:[
-['What is the Messianic Secret in Mark?','Jesus repeatedly tells people not to reveal that he is the Messiah.'],
-['What happened at Caesarea Philippi?','Peter declares "You are the Messiah", a turning point in Mark\'s Gospel.'],
-['Define the sanctity of life.','The belief that life is sacred and given by God, so only God should take it away.'],
-['Voluntary vs non-voluntary euthanasia?','Voluntary: at the person\'s request. Non-voluntary: the person cannot give consent (e.g. in a coma).'],
-['What is agape?','Selfless, unconditional love; central to Christian ethics.'],
-['Parable of the Sower: what is it about?','How people respond differently to the word of God: seeds on path, rocky ground, thorns and good soil.'],
-['What does "evaluate" questions want?','Arguments for and against, including religious views, then a justified conclusion.']]},
-{id:'french',n:'French',c:'#3557d6',m:'FR',topics:['Identity, lifestyle & culture','Local, national, international & global areas of interest','School life, studies & the world of work','Listening','Speaking','Reading','Writing'],cards:[
-['How do you form the passé composé?','avoir or être (present) + past participle: j\'ai mangé, je suis allé(e).'],
-['Which verbs take être? (DR & MRS VANDERTRAMP)','Devenir, revenir, monter, rester, sortir, venir, aller, naître, descendre, entrer, rentrer, tomber, retourner, arriver, mourir, partir (+ reflexives).'],
-['How do you form the near future?','aller (present) + infinitive: je vais jouer.'],
-['Imperfect stem and endings?','nous form minus -ons + ais, ais, ait, ions, iez, aient (être: ét-).'],
-['Useful opinion phrase to boost your grade?','"À mon avis, … parce que …" / "Ce qui me plaît, c\'est …"'],
-['Conditional: "I would like"?','Je voudrais / J\'aimerais'],
-['Translate: "If I had more money, I would travel."','Si j\'avais plus d\'argent, je voyagerais.']]},
-{id:'spanish',n:'Spanish',c:'#d23c2c',m:'ES',topics:['Identity, lifestyle & culture','Local, national, international & global areas of interest','School life, studies & the world of work','Listening','Speaking','Reading','Writing'],cards:[
-['Preterite endings for -ar verbs?','-é, -aste, -ó, -amos, -asteis, -aron (hablé).'],
-['Ser vs estar?','Ser: permanent traits, origin, time, profession. Estar: location, temporary states, feelings.'],
-['Near future?','ir a + infinitive: voy a estudiar.'],
-['Imperfect of -ar verbs?','-aba, -abas, -aba, -ábamos, -abais, -aban.'],
-['"I like" vs "I like (plural things)"?','Me gusta + singular / Me gustan + plural.'],
-['Conditional: "I would like"?','Me gustaría'],
-['Translate: "When I was young, I used to play football."','Cuando era joven, jugaba al fútbol.']]},
-{id:'irish',n:'Irish',c:'#0f9b6b',m:'GA',topics:['Identity, lifestyle & culture','Local, national, international & global areas of interest','School life, studies & the world of work','Listening','Speaking','Reading','Writing'],cards:[
-['How do you say "my name is"?','Is mise … / … is ainm dom.'],
-['Past tense (aimsir chaite) of most verbs?','Lenite the first consonant: chuir mé, dhún mé; add d\' before vowels: d\'ól mé.'],
-['How do you say "I like"?','Is maith liom …'],
-['Future tense ending for broad verbs (e.g. dún)?','-faidh: dúnfaidh mé.'],
-['How do you give an opinion?','Sílim go … / Is dóigh liom go … / I mo thuairim …'],
-['"I would like"?','Ba mhaith liom …']]},
-{id:'business',n:'Business Studies',c:'#2e7d5b',m:'BS',topics:['Starting a business','Developing a business','Marketing','Meeting customer needs','Effective business operations','Finance','Human resources'],cards:[
-['What is unlimited liability?','The owner is personally responsible for all business debts, so personal possessions can be at risk (sole traders, partnerships).'],
-['The 4Ps of the marketing mix?','Product, Price, Place, Promotion.'],
-['Break-even point formula?','Fixed costs ÷ (selling price − variable cost per unit).'],
-['Cash flow vs profit?','Cash flow is the movement of money in and out over time; profit is revenue minus total costs. A profitable firm can still run out of cash.'],
-['Maslow\'s hierarchy (bottom to top)?','Physiological, safety, social, esteem, self-actualisation.'],
-['Name four stakeholders.','Owners/shareholders, employees, customers, suppliers (also the local community and government).'],
-['What is market segmentation?','Dividing a market into groups (e.g. age, gender, income, location) to target customers better.'],
-['Gross profit formula?','Revenue − cost of sales.']]},
-{id:'digi',n:'Digital Technology',c:'#0a7ea4',m:'DT',topics:['Digital data','Software','Database applications','Computer hardware','Network technologies','Cyberspace, network security & data transfer','Programming (multimedia or programming route)'],cards:[
-['Convert 13 to binary.','1101 (8 + 4 + 1).'],
-['RAM vs ROM?','RAM is volatile, read/write, holds running programs and data. ROM is non-volatile, read-only, holds start-up instructions (BIOS).'],
-['What is a primary key?','A field that uniquely identifies each record in a database table.'],
-['What is the Computer Misuse Act 1990?','Makes unauthorised access to computer material, access with intent to commit further crime, and unauthorised modification illegal.'],
-['Star topology: one advantage, one disadvantage?','Advantage: one cable failing affects only one device. Disadvantage: if the central switch fails, the whole network fails.'],
-['What is phishing?','Fake emails or messages pretending to be from a trusted organisation to trick people into giving personal details.'],
-['What is cloud computing?','Storing data or running software on remote servers accessed over the internet.'],
-['How many bits in a byte?','8 bits. A nibble is 4 bits.']]},
-{id:'food',n:'Food & Nutrition',c:'#d1692b',m:'FN',topics:['Food provenance','Food processing & production','Nutrients & health','Healthy diet','Food safety','Consumer awareness','Practical food skills'],cards:[
-['What is the temperature danger zone?','5°C to 63°C: bacteria multiply fastest; keep cold food below 5°C and hot food above 63°C.'],
-['Functions of protein?','Growth, repair and maintenance of body tissues; a secondary energy source.'],
-['What is gelatinisation?','Starch granules absorb liquid when heated, swell and burst, thickening a sauce (around 60–80°C+).'],
-['Which vitamin helps absorb iron?','Vitamin C. Iron deficiency can cause anaemia.'],
-['Name two food poisoning bacteria.','Salmonella (raw eggs, poultry), E. coli (undercooked meat), Campylobacter, Listeria.'],
-['What does the Eatwell Guide show?','The proportions of food groups for a healthy, balanced diet: fruit & veg, starchy carbs, proteins, dairy, oils/spreads.'],
-['What is food provenance?','Where food comes from: how and where it was grown, reared, caught or made.']]},
-{id:'llw',n:'Learning for Life & Work',c:'#c2410c',m:'LW',topics:['Local & global citizenship','Personal development','Employability','Investigation (CA)'],cards:[
-['What is the UNCRC?','The UN Convention on the Rights of the Child: 54 articles setting out the rights of every child under 18.'],
-['What does the Equality Commission for NI do?','Promotes equality and tackles discrimination in employment and services in Northern Ireland.'],
-['Name three features of a democracy.','Free and fair elections, rule of law, freedom of speech and the press, protection of human rights.'],
-['What should a CV include?','Personal details, personal profile, education & qualifications, work experience, skills, interests, referees.'],
-['What is an entrepreneur?','Someone who sets up a business and takes on financial risk in the hope of profit.'],
-['Name a pressure group method.','Petitions, protests, lobbying politicians, social media campaigns.']]},
-{id:'art',n:'Art & Design',c:'#c0367f',m:'AD',topics:['Part A: Exploratory portfolio','Part B: Investigating the creative and cultural industries','Externally set assignment','Formal elements','Artist research'],cards:[
-['What are the formal elements?','Line, tone, colour, shape, form, texture, pattern (and space/composition).'],
-['How should you annotate your sketchbook?','Explain why you chose techniques, what worked, what didn\'t, and how an artist influenced your next step.'],
-['Complementary colours?','Opposites on the colour wheel: red–green, blue–orange, yellow–purple.'],
-['How do you analyse an artist\'s work?','Content (what), form (how it\'s made), process (techniques), mood (feelings), and how it links to your own ideas.'],
-['What makes development strong?','A clear journey from research to experiments to refined ideas, with each step responding to the last.']]},
-{id:'music',n:'Music',c:'#8a3ffc',m:'MU',topics:['Performing','Composing','Listening & appraising','Areas of study (set works)','Musical elements'],cards:[
-['What is an ostinato?','A short musical pattern repeated persistently.'],
-['Ternary vs rondo form?','Ternary: ABA. Rondo: ABACA (main theme returns between contrasting sections).'],
-['Perfect vs plagal cadence?','Perfect: V–I (sounds finished). Plagal: IV–I (the "Amen" cadence).'],
-['Imperfect and interrupted cadences?','Imperfect ends on V (unfinished). Interrupted: V–VI (surprise).'],
-['What does "pizzicato" mean?','Plucking the strings of a bowed instrument.'],
-['Define syncopation.','Accenting off-beats or weak beats, making the rhythm feel off-balance.'],
-['What does DR SMITH stand for?','Dynamics, Rhythm, Structure, Melody, Instrumentation, Texture, Harmony: the elements to comment on.']]},
-{id:'pe',n:'Physical Education',c:'#0e9f6e',m:'PE',topics:['Health, training & exercise','Exercise physiology','Movement analysis','Performance','Analysis & evaluation of performance'],cards:[
-['What does FITT stand for?','Frequency, Intensity, Time, Type.'],
-['Name the health-related components of fitness.','Cardiovascular endurance, muscular endurance, muscular strength, flexibility, body composition.'],
-['Skill-related components of fitness?','Agility, balance, coordination, power, reaction time, speed.'],
-['Maximum heart rate estimate?','220 − age.'],
-['Aerobic vs anaerobic exercise?','Aerobic uses oxygen, for long, steady activity. Anaerobic is without oxygen, for short, high-intensity bursts, producing lactic acid.'],
-['What does SMART stand for?','Specific, Measurable, Achievable, Realistic, Time-bound.'],
-['RICE treatment?','Rest, Ice, Compression, Elevation (for soft-tissue injuries).']]},
-{id:'tech',n:'Technology & Design',c:'#4b5563',m:'TD',topics:['Core: materials, processes, design','Systems & control: electronics','Systems & control: mechanical','Product design','Design & manufacture (CA)'],cards:[
-['Thermoplastic vs thermosetting plastic?','Thermoplastics soften when heated and can be reshaped (acrylic). Thermosets set permanently (epoxy resin, melamine).'],
-['Ferrous vs non-ferrous metal?','Ferrous contains iron and is usually magnetic (mild steel). Non-ferrous doesn\'t (aluminium, copper).'],
-['What is anthropometrics?','The study of human body measurements, used to size products.'],
-['What is ergonomics?','Designing products to be comfortable, safe and efficient for people to use.'],
-['What is CAD/CAM?','Computer-aided design and computer-aided manufacture (e.g. laser cutter, 3D printer).'],
-['What is a potential divider used for?','Splitting voltage, e.g. with an LDR or thermistor to make a sensing circuit.'],
-['Gear ratio?','Number of teeth on driven gear ÷ number of teeth on driver gear.']]},
-{id:'mia',n:'Moving Image Arts',c:'#111827',m:'MI',topics:['Film language','Pre-production (storyboard, script)','Production (CA)','Online exam: film analysis','Genres & film history'],cards:[
-['What is the 180-degree rule?','Keep the camera on one side of an imaginary line between two characters so their screen positions stay consistent.'],
-['Diegetic vs non-diegetic sound?','Diegetic exists in the story world (dialogue, footsteps). Non-diegetic is added for the audience (score, voice-over).'],
-['What is mise-en-scène?','Everything in the frame: setting, props, costume, make-up, lighting, actors\' performance and positioning.'],
-['What is a match on action?','A cut from one shot to another that continues the same movement, making the edit invisible.'],
-['High-angle vs low-angle shot?','High angle looks down, making a subject seem weak; low angle looks up, making them seem powerful.'],
-['What is a shot-reverse-shot?','Alternating between two characters\' viewpoints in a conversation.']]},
-{id:'econ',n:'Economics',c:'#155e75',m:'EC',topics:['The economic problem','Markets & prices','Market failure','Government & the economy','International trade','Personal finance'],cards:[
-['What is opportunity cost?','The value of the next best alternative given up when making a choice.'],
-['What is the basic economic problem?','Scarcity: unlimited wants but limited resources.'],
-['What happens to demand when price rises?','Quantity demanded falls (movement along the demand curve), all else equal.'],
-['What is inflation and how is it measured in the UK?','A sustained rise in the general price level; measured using the Consumer Prices Index (CPI).'],
-['What is GDP?','Gross domestic product: the total value of goods and services produced in a country in a year.'],
-['Price elastic demand means?','A change in price causes a proportionally larger change in quantity demanded (PED > 1).']]},
-{id:'cd',n:'Child Development',c:'#db2777',m:'CD',topics:['Parenthood','Pregnancy & antenatal care','Birth & postnatal care','Physical development','Intellectual, social & emotional development','Childcare & play'],cards:[
-['PIES stands for?','Physical, Intellectual, Emotional, Social development.'],
-['What is a milestone?','A skill most children achieve by a certain age, e.g. walking around 12 months.'],
-['Why take folic acid before and in early pregnancy?','It reduces the risk of neural tube defects such as spina bifida.'],
-['Fine vs gross motor skills?','Fine: small movements (pincer grip, drawing). Gross: large movements (crawling, running).'],
-['Name three types of play.','Solitary, parallel, cooperative (also creative, imaginative, physical).']]},
-{id:'hsc',n:'Health & Social Care',c:'#0d9488',m:'HS',topics:['Personal development, health & wellbeing','Working in health & social care','Health promotion','Care values'],cards:[
-['Life stages?','Infancy (0–2), childhood (3–10), adolescence (11–18), early adulthood (19–45), middle adulthood (46–65), later adulthood (65+).'],
-['Name three care values.','Promoting rights, maintaining confidentiality, promoting equality and diversity (also dignity, choice, effective communication).'],
-['Formal vs informal care?','Formal: paid professionals (nurses, care workers). Informal: unpaid family or friends.'],
-['What is health promotion?','Activities that encourage people to improve their health, e.g. anti-smoking campaigns.']]},
-{id:'gov',n:'Government & Politics',c:'#1e3a8a',m:'GP',topics:['Northern Ireland Assembly & Executive','Westminster','Elections & voting systems','Political parties','Rights & the EU'],cards:[
-['How many MLAs sit in the NI Assembly?','90 (5 for each of 18 constituencies).'],
-['Voting system for NI Assembly elections?','Single Transferable Vote (STV), a proportional system ranking candidates 1, 2, 3…'],
-['Voting system for Westminster elections?','First Past The Post: the candidate with the most votes in each constituency wins.'],
-['How many MPs in the House of Commons?','650.'],
-['What is the d\'Hondt method used for in NI?','Allocating ministerial posts in the Executive in proportion to party strength.']]}
-];
-const M=[
-{n:'Practice testing (retrieval practice)',u:'High',why:'Pulling information out of memory strengthens it far more than putting it in again. The single best-supported technique.',how:['Flashcards: say the answer before you flip','Close the book and write everything you know','Do questions without notes, then check'],go:'cards'},
-{n:'Spaced (distributed) practice',u:'High',why:'Reviewing over days and weeks beats one long cram. Forgetting a little between reviews makes the next recall stronger.',how:['Review new material after 1 day, then 3, 7, 14 days','Little and often: 30 minutes a day beats 4 hours on Sunday','Use the Leitner boxes here; they schedule it for you'],go:'mixed'},
-{n:'Past papers & mark schemes',u:'High',why:'Practice testing in the exact format you\'ll be assessed. You learn command words, timing and what examiners reward.',how:['Download CCEA past papers and mark schemes from ccea.org.uk','Do them timed, then mark strictly with the mark scheme','Read Chief Examiner reports for common mistakes'],go:null},
-{n:'Interleaving',u:'Moderate',why:'Mixing topics or problem types forces you to choose the right method, which is what exams make you do.',how:['Mix maths question types instead of 20 of the same','Swap subjects every block','Use Mixed review here'],go:'mixed'},
-{n:'Elaborative interrogation',u:'Moderate',why:'Asking "why is this true?" links new facts to what you already know.',how:['For every fact ask why and how','Connect causes and consequences in history','Explain why a step in a method works'],go:null},
-{n:'Self-explanation',u:'Moderate',why:'Explaining each step of a worked example to yourself exposes gaps in understanding.',how:['Talk through worked examples line by line','Say what each step does and why','Spot where you can\'t explain it, then revisit'],go:null},
-{n:'Blurting',u:'Moderate',why:'A form of free recall: write everything you remember about a topic from memory, then check what you missed.',how:['Pick a topic, set 5–10 minutes','Write without notes','Check, and fill gaps in a different colour'],go:'blurt'},
-{n:'Teach it (Feynman technique)',u:'Moderate',why:'Explaining in simple words to someone else (or a rubber duck) reveals what you don\'t really understand.',how:['Explain a topic as if to a 12-year-old','Where you get stuck, go back to the source','Simplify and use analogies'],go:null},
-{n:'Dual coding',u:'Promising',why:'Combining words with visuals (diagrams, timelines, flowcharts) gives memory two routes to the same idea.',how:['Draw labelled diagrams from memory (cells, waterfalls)','Turn processes into flowcharts','Make timelines for history'],go:null},
-{n:'Mind maps',u:'Moderate',why:'Useful for organising links between ideas, especially when drawn from memory rather than copied.',how:['Start from a blank page, not your notes','Add links between branches','Then check and add what you missed'],go:null},
-{n:'Mnemonics',u:'Low',why:'Good for memorising lists and orders (DR & MRS VANDERTRAMP, SOH CAH TOA), weak for understanding.',how:['Use for fixed lists only','Pair with understanding','Make them silly to stick'],go:null},
-{n:'Summarising',u:'Low',why:'Helps only if you\'re already good at it; often turns into copying.',how:['Condense notes from memory, not by copying','Limit yourself to one card per topic','Turn summaries into questions'],go:null},
-{n:'Highlighting & underlining',u:'Low',why:'Feels productive but adds little. Can even make you focus on isolated facts.',how:['Highlight only once you\'ve read a whole section','Turn highlights into flashcard questions'],go:null},
-{n:'Re-reading',u:'Low',why:'Creates a feeling of familiarity, not memory. The most common and among the least effective methods.',how:['Read once, then close it and test yourself','Swap re-reading for blurting'],go:null}
-];
-const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-const esc=t=>String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-let P={};try{P=JSON.parse(localStorage.getItem('rni')||'{}')}catch(e){}
-P.c=P.c||{};P.days=P.days||[];
-const save=()=>{try{localStorage.setItem('rni',JSON.stringify(P))}catch(e){}};
-const DAY=864e5,today=()=>Math.floor(Date.now()/DAY);
-const ALL=[];S.forEach(s=>s.cards.forEach((c,i)=>ALL.push({k:s.id+':'+i,s,q:c[0],a:c[1]})));
-const st=k=>P.c[k]||{b:0,d:0};
-const due=c=>st(c.k).d<=today();
-const INT=[0,1,2,4,8,16];
-function rate(c,r){const x=st(c.k);let b=x.b;if(r===3)b=Math.min(5,b+1);else if(r===1)b=1;else b=Math.max(1,b);
-  P.c[c.k]={b,d:today()+(r===1?0:r===2?1:INT[b])};const t=today();if(!P.days.includes(t))P.days.push(t);save();stats()}
-function streak(){let n=0,t=today();const d=new Set(P.days);if(!d.has(t))t--;while(d.has(t)){n++;t--}return n}
-function stats(){$('#hDue').textContent=ALL.filter(due).length;$('#hMas').textContent=ALL.filter(c=>st(c.k).b>=5).length;$('#hStreak').textContent=streak();
-  const ex=P.ex||'2027-05-10';$('#exDate').value=ex;const dd=Math.ceil((new Date(ex)-Date.now())/DAY);$('#hDays').textContent=dd>0?dd:'0';renderGrid()}
-$('#exDate').addEventListener('change',e=>{P.ex=e.target.value;save();stats()});
-const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
-
-/* deck engine */
-function Deck(cardEl,rateEl,getQueue,onEmpty){
-  let q=[],cur=null;
-  const draw=()=>{cur=q[0];cardEl.classList.remove('flip');
-    if(!cur){cardEl.innerHTML=`<div class="face" style="--sc:var(--ok)"><div class="tag"><span>All done</span></div><div class="q">Nothing due here. Come back tomorrow, or reset to practise again.</div><div><button class="btn" data-reset>Practise all again</button></div></div>`;rateEl.innerHTML='';onEmpty&&onEmpty();return}
-    const b=st(cur.k).b;
-    cardEl.innerHTML=`<div class="face" style="--sc:${cur.s.c}"><div class="tag"><span>${esc(cur.s.n)}</span><span>Box ${b||'new'}</span></div><div class="q">${esc(cur.q)}</div><div class="hint">Say your answer out loud, then tap or press Space</div></div>
-    <div class="face back" style="--sc:${cur.s.c}"><div class="tag"><span>Answer</span><span>${q.length} left</span></div><div class="q a">${esc(cur.a)}</div><div class="hint">Be honest. Rating it hard now saves you marks later.</div></div>`;
-    rateEl.innerHTML=`<button class="r1" disabled data-r="1">Forgot</button><button class="r2" disabled data-r="2">Shaky</button><button class="r3" disabled data-r="3">Got it</button>`};
-  const flip=()=>{if(!cur)return;cardEl.classList.toggle('flip');rateEl.querySelectorAll('button').forEach(b=>b.disabled=false)};
-  cardEl.addEventListener('click',e=>{if(e.target.closest('[data-reset]')){q=shuffle(getQueue(true));draw();return}flip()});
-  const doRate=r=>{if(!cur||!cardEl.classList.contains('flip'))return;rate(cur,r);q.shift();if(r===1)q.splice(Math.min(3,q.length),0,cur);draw()};
-  rateEl.addEventListener('click',e=>{const b=e.target.closest('[data-r]');if(b)doRate(+b.dataset.r)});
-  return{load(){q=shuffle(getQueue(false));draw()},flip,doRate,el:cardEl,left:()=>q.length}
-}
-const hero=Deck($('#heroCard'),$('#heroRate'),all=>{const d=ALL.filter(due);return (all||!d.length?ALL:d).slice()});
-const mix=Deck($('#mixCard'),$('#mixRate'),all=>all?ALL:ALL.filter(due));
-let subDeck=null,active=null;
-document.addEventListener('keydown',e=>{if(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName))return;
-  const d=$('#v-mixed').classList.contains('on')?mix:$('#v-home').classList.contains('on')?hero:subDeck&&$('#svBody .fc')?subDeck:null;if(!d)return;
-  if(e.code==='Space'){e.preventDefault();d.flip()}else if(['1','2','3'].includes(e.key))d.doRate(+e.key)});
-
-/* grid & search */
-function renderGrid(){$('#subGrid').innerHTML=S.map(s=>{const m=s.cards.filter((c,i)=>st(s.id+':'+i).b>=3).length,d=s.cards.filter((c,i)=>st(s.id+':'+i).d<=today()).length;
-  return `<button class="sub" data-sub="${s.id}"><span class="mono" style="background:${s.c}">${s.m}</span><h3>${esc(s.n)}</h3><small>${s.cards.length} cards · ${d} due · ${s.topics.length} topics</small><span class="bar"><i style="width:${Math.round(m/s.cards.length*100)}%"></i></span></button>`}).join('')}
-$('#q').addEventListener('input',e=>{const t=e.target.value.trim().toLowerCase();const r=$('#searchRes');
-  $$('.sub').forEach(b=>{const s=S.find(x=>x.id===b.dataset.sub);b.style.display=!t||s.n.toLowerCase().includes(t)?'':'none'});
-  if(t.length<3){r.style.display='none';return}const hits=ALL.filter(c=>(c.q+' '+c.a).toLowerCase().includes(t)).slice(0,12);
-  r.style.display=hits.length?'':'none';r.innerHTML='<h3>Matching cards</h3>'+hits.map(c=>`<div class="row"><b>${esc(c.q)}</b><span class="ans">${esc(c.a)}</span><span class="box">${esc(c.s.m)}</span></div>`).join('')});
-
-/* methods */
-$('#ladder').innerHTML=M.map((m,i)=>`<div class="m"><div class="rk">${i+1}</div><div><h3>${esc(m.n)}<span class="pill ${m.u}">${m.u==='Promising'?'Promising':m.u+' utility'}</span></h3><p class="mut">${esc(m.why)}</p><details><summary>How to do it</summary><ul>${m.how.map(h=>`<li>${esc(h)}</li>`).join('')}</ul></details></div>${m.go?`<button class="btn ghost go" data-try="${m.go}">Try it</button>`:'<span></span>'}</div>`).join('');
-
-/* subject view */
-const TABS=[['cards','Flashcards'],['quiz','Quiz'],['blurt','Blurt'],['topics','Topics & all cards']];
-function openSub(id,tab='cards'){active=S.find(s=>s.id===id);if(!active)return go('home');
-  document.documentElement.style.setProperty('--sc',active.c);
-  $('#svHead').style.setProperty('--sc',active.c);
-  $('#svHead').innerHTML=`<div class="wrap"><button class="back" data-go="home">← Subjects</button><span class="mono" style="background:rgba(255,255,255,.2);width:56px;height:56px;font-size:18px">${active.m}</span><div><h1>${esc(active.n)}</h1><p style="margin:6px 0 0;opacity:.9">CCEA GCSE · ${active.cards.length} cards · ${active.topics.length} topic areas</p></div></div>`;
-  $('#tabs').innerHTML=TABS.map(([k,l])=>`<button class="tab${k===tab?' on':''}" data-tab="${k}">${l}</button>`).join('');
-  T[tab]();}
-const subCards=()=>ALL.filter(c=>c.s===active);
-const T={
-cards(){$('#svBody').innerHTML=`<div class="two"><div><div class="deck"><div class="fc" id="sCard"></div></div><div class="rate" id="sRate"></div></div><div class="panel"><h3>Why flashcards first?</h3><p class="mut">Testing yourself is the most effective revision method there is. Cards you forget come back sooner; cards you know get pushed further away.</p><p class="mut">Keys: <b>Space</b> flip · <b>1</b> forgot · <b>2</b> shaky · <b>3</b> got it</p></div></div>`;
-  subDeck=Deck($('#sCard'),$('#sRate'),all=>{const c=subCards(),d=c.filter(due);return all||!d.length?c:d});subDeck.load()},
-quiz(){subDeck=null;const cs=shuffle(subCards()).slice(0,8);let i=0,score=0;
-  const show=()=>{if(i>=cs.length){$('#svBody').innerHTML=`<div class="panel" style="max-width:640px"><h2>${score} / ${cs.length}</h2><p class="mut">${score===cs.length?'Perfect. Push those cards further with flashcards.':'Wrong answers have been sent back to box 1 in your flashcards so they come up again soon.'}</p><button class="btn" data-tab="quiz">Another round</button></div>`;return}
-    const c=cs[i],opts=shuffle([c,...shuffle(subCards().filter(x=>x!==c)).slice(0,3)]);
-    $('#svBody').innerHTML=`<div class="panel" style="max-width:760px"><p class="mut" style="margin:0">Question ${i+1} of ${cs.length} · Score ${score}</p><h3 style="font-size:22px;margin:10px 0 6px;font-family:Inter;line-height:1.3">${esc(c.q)}</h3>${opts.map((o,j)=>`<button class="opt" data-o="${j}">${esc(o.a)}</button>`).join('')}</div>`;
-    $$('.opt').forEach((b,j)=>b.onclick=()=>{if($('.opt.good'))return;const ok=opts[j]===c;if(ok)score++;else{P.c[c.k]={b:1,d:today()};save()}
-      $$('.opt').forEach((x,k)=>{if(opts[k]===c)x.classList.add('good');else if(k===j)x.classList.add('bad')});setTimeout(()=>{i++;show()},ok?700:1600)})};show()},
-blurt(){subDeck=null;$('#svBody').innerHTML=`<div class="two"><div><div class="panel"><label for="bt" style="font-weight:600">Topic</label><select id="bt" class="search" style="width:100%;margin:8px 0 14px">${active.topics.map(t=>`<option>${esc(t)}</option>`).join('')}</select>
-  <textarea id="bx" placeholder="Write everything you remember about this topic. No notes. Don't stop to check."></textarea>
-  <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap;align-items:center"><button class="btn" id="bGo">Start 7-minute blurt</button><button class="btn ghost" id="bChk">Check against key points</button><b id="bT" style="font-family:Unbounded"></b></div></div></div>
-  <div class="panel" id="bRes"><h3>How blurting works</h3><p class="mut">1. Pick a topic. 2. Write everything from memory against the clock. 3. Check against the key points and tick what you got. 4. Re-learn the gaps, then blurt again in a few days.</p></div></div>`;
-  try{$('#bx').value=localStorage.getItem('rni-b-'+active.id)||''}catch(e){}
-  $('#bx').oninput=e=>{try{localStorage.setItem('rni-b-'+active.id,e.target.value)}catch(x){}};
-  let bt=null;$('#bGo').onclick=()=>{clearInterval(bt);let s=420;$('#bx').focus();bt=setInterval(()=>{s--;$('#bT').textContent=`${s/60|0}:${String(s%60).padStart(2,'0')}`;if(s<=0){clearInterval(bt);$('#bT').textContent='Time!';}},1000)};
-  $('#bChk').onclick=()=>{const txt=$('#bx').value.toLowerCase();
-    $('#bRes').innerHTML='<h3>Key points: tick what you included</h3>'+subCards().map((c,i)=>{const w=c.a.toLowerCase().match(/[a-z]{5,}/g)||[];const hit=w.length&&w.filter(x=>txt.includes(x)).length/w.length>.3;
-      return `<label class="chk"><input type="checkbox" ${hit?'checked':''} data-k="${c.k}"><span><b>${esc(c.q)}</b><br><span class="mut">${esc(c.a)}</span></span></label>`}).join('')+'<button class="btn" id="bSave" style="margin-top:14px">Send unticked to flashcards</button>';
-    $('#bSave').onclick=()=>{$$('#bRes input').forEach(x=>{if(!x.checked){P.c[x.dataset.k]={b:1,d:today()}}});save();stats();$('#bSave').textContent='Done: gaps queued for today'}}},
-topics(){subDeck=null;$('#svBody').innerHTML=`<div class="panel" style="margin-bottom:18px"><h3>Topic areas</h3><div class="chips" style="margin-top:12px">${active.topics.map(t=>`<span class="chip">${esc(t)}</span>`).join('')}</div><p class="note" style="margin:12px 0 0">Check the current CCEA specification for your tier and options.</p></div>
-  <div class="panel list"><h3>All cards</h3>${subCards().map(c=>`<div class="row"><b>${esc(c.q)}</b><span class="ans">${esc(c.a)}</span><span class="box">${st(c.k).b?'Box '+st(c.k).b:'New'}</span></div>`).join('')}</div>`}
-};
-$('#tabs').addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(!b)return;$$('.tab').forEach(t=>t.classList.toggle('on',t===b));T[b.dataset.tab]()});
-$('#svBody').addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(b){T[b.dataset.tab]()}});
-
-/* timer */
-const PRE=[['Pomodoro',25,5],['Deep',50,10],['Quick',15,3]];let tw=25,tb=5,left=25*60,run=null,brk=false,done=0;
-$('#presets').innerHTML=PRE.map((p,i)=>`<button class="tab${i?'':' on'}" data-p="${i}">${p[0]} ${p[1]}/${p[2]}</button>`).join('');
-const tDraw=()=>{$('#tm').textContent=`${String(left/60|0).padStart(2,'0')}:${String(left%60).padStart(2,'0')}`;const tot=(brk?tb:tw)*60;$('#arc').style.strokeDashoffset=326.7*(1-left/tot);$('#arc').style.stroke=brk?'var(--ok)':'var(--co)';$('#tmode').textContent=brk?'Break':'Focus';$('#tCount').textContent=`Focus blocks done this session: ${done}`};
-const tReset=()=>{clearInterval(run);run=null;brk=false;left=tw*60;$('#tGo').textContent='Start';tDraw()};
-$('#presets').addEventListener('click',e=>{const b=e.target.closest('[data-p]');if(!b)return;$$('#presets .tab').forEach(x=>x.classList.toggle('on',x===b));[,tw,tb]=PRE[b.dataset.p];tReset()});
-$('#tGo').onclick=()=>{if(run){clearInterval(run);run=null;$('#tGo').textContent='Resume';return}$('#tGo').textContent='Pause';
-  run=setInterval(()=>{left--;if(left<0){if(!brk)done++;brk=!brk;left=(brk?(done%4===0?tb*3:tb):tw)*60}tDraw()},1000)};
-$('#tReset').onclick=tReset;tDraw();
-
-/* routing */
-function go(v){if(v.startsWith('s-')){show('subject');openSub(v.slice(2))}else{show(v);if(v==='mixed'){mix.load();$('#mixLeft').textContent=`${ALL.filter(due).length} cards due across all subjects`}}
-  if(location.hash.slice(1)!==v)history.replaceState(null,'','#'+v);window.scrollTo(0,0)}
-function show(v){$$('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+v));$$('.nl').forEach(n=>n.classList.toggle('on',n.dataset.go===v))}
-document.addEventListener('click',e=>{const g=e.target.closest('[data-go]'),s=e.target.closest('[data-sub]'),t=e.target.closest('[data-try]');
-  if(g)go(g.dataset.go);else if(s)go('s-'+s.dataset.sub);
-  else if(t){const k=t.dataset.try;if(k==='mixed')go('mixed');else{const sub=S[0].id;go('s-'+sub);openSub(sub,k)}}});
-window.addEventListener('hashchange',()=>go(location.hash.slice(1)||'home'));
-stats();hero.load();go(location.hash.slice(1)||'home');
-}
-</script>
+<script src="assets/data.js"></script>
+<script src="assets/app.js"></script>
 </body>
 </html>
